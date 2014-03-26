@@ -1,0 +1,8 @@
+[
+	{"bucket": "s3-bucket"}, 
+    ["starts-with", "$key", "uploads/"],
+    {"acl": "private"},
+    {"success_action_redirect": "http://localhost/"},
+    ["starts-with", "$Content-Type", ""],
+    ["content-length-range", 0, 1048576]
+]
