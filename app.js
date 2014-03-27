@@ -9,8 +9,8 @@ var policyData = helpers.readJSONFile(POLICY_FILE);
 
 var policy = new s3post.Policy(policyData, new Date());
 
-
-var formHiddenFields = s3post.generateS3FormFields(awsCofig, policy);
+var s3Form = new s3post.S3Form(awsCofig, policy);
+var formHiddenFields = s3Form.generateS3FormFields();
 console.log(formHiddenFields);
 
 var urlMap = [

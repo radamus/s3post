@@ -24,14 +24,17 @@ Policy.prototype.getSignature = function(secretAccessKey){
 	return helpers.hmac("sha1", secretAccessKey, this.getEncodedPolicyDocument(), 'base64');	
 }
 
-
-var generateS3FormFields = function(awsCofig, policy) {
-	var conditions = policy.getConditions();
-	var policyDocument = policy.getEncodedPolicyDocument();
-	var signature = policy.getSignature(awsCofig.secretAccessKey);
+var S3Form = function(awsCofig, policy){
+	this.awsCofig = awsCofig;
+	this.policy = policy;
+}
+S3Form.prototype.generateS3FormFields = function() {
+	var conditions =this.policy.getConditions();
+	var policyDocument = this.policy.getEncodedPolicyDocument();
+	var signature = this.policy.getSignature(this.awsCofig.secretAccessKey);
 	var formFields = [];
 
-	formFields.push(hiddenField("AWSAccessKeyId", awsCofig.accessKeyId));
+	formFields.push(hiddenField("AWSAccessKeyId", this.awsCofig.accessKeyId));
 	conditions.forEach(function(elem){
 		if(Array.isArray(elem)){
 			if(elem[1] === "$key")
@@ -58,4 +61,4 @@ var hiddenField = function(fieldName, value) {
 }
 
 exports.Policy = Policy;
-exports.generateS3FormFields = generateS3FormFields;
+exports.S3Form = S3Form;
