@@ -1,3 +1,4 @@
+var util = require("util");
 var helpers = require("./helpers");
 var s3post = require("./s3post");
 var PORT = 8080;
@@ -6,21 +7,22 @@ var POLICY_FILE = "policy.json";
 
 var awsCofig = helpers.readJSONFile(AWS_CONFIG_FILE);
 var policyData = helpers.readJSONFile(POLICY_FILE);
-
-var policy = new s3post.Policy(policyData, new Date());
+var expire = new Date();
+expire = expire.setHours(expire.getHours() + 1);
+var policy = new s3post.Policy(policyData, expire);
 
 var s3Form = new s3post.S3Form(awsCofig, policy);
 var formHiddenFields = s3Form.generateS3FormFields();
-console.log(formHiddenFields);
+console.log(util.inspect(formHiddenFields, false, null));
 
 var urlMap = [
-	{path: "/", action:{template: "index.ejs", params:formHiddenFields}},	 
+	{path: "/", action:{template: "index.ejs", params:{fields:formHiddenFields} } },	 
 //	{path: "/digest", action: lab1_1},	
 	];
 
 var service = require("webs-weeia").http(urlMap);
 
-//service(PORT);
+service(PORT);
 
 
 

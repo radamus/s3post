@@ -34,30 +34,32 @@ S3Form.prototype.generateS3FormFields = function() {
 	var signature = this.policy.getSignature(this.awsCofig.secretAccessKey);
 	var formFields = [];
 
-	formFields.push(hiddenField("AWSAccessKeyId", this.awsCofig.accessKeyId));
+	
 	conditions.forEach(function(elem){
 		if(Array.isArray(elem)){
 			if(elem[1] === "$key")
 				formFields.push(hiddenField("key", elem[2] + "${filename}"));			
 		}else {
-				var key = Object.keys(elem)[0];
-				var value = elem[key];
-			 formFields.push(hiddenField(key, value));
+
+			var key = Object.keys(elem)[0];
+			var value = elem[key];
+			if(key !== "bucket")
+			 	formFields.push(hiddenField(key, value));
 		}	
 	});
-		
+	formFields.push(hiddenField("AWSAccessKeyId", this.awsCofig.accessKeyId));	
 	formFields.push(hiddenField("policy", policyDocument));
 	formFields.push(hiddenField("signature", signature));
 
-	var fields = formFields.join("\n");
-	return fields;
+	return formFields;
 	
 }
 
 
 
 var hiddenField = function(fieldName, value) {
-	return  '<input type="hidden" name="' + fieldName + '" value="' + value + '"/>';
+	//return  '<input type="hidden" name="' + fieldName + '" value="' + value + '"/>';
+	return {name: fieldName, value : value};
 }
 
 exports.Policy = Policy;
