@@ -1,8 +1,11 @@
-var helpers = require("./helpers");
 var util = require("util");
+var helpers = require("./helpers");
+var moment = require("moment");
 
 var Policy = function(policyData){
-	this.policy = policyData;		
+	this.policy = policyData;	
+	this.policy.expiration = moment().add(policyData.expiration).toJSON();
+	console.log("policyData " + util.inspect(policyData, false, null));	
 }
 
 Policy.prototype.getEncodedPolicyDocument = function(){

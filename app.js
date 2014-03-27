@@ -1,5 +1,4 @@
 var util = require("util");
-var moment = require("moment");
 var helpers = require("./helpers");
 var s3post = require("./s3post");
 var PORT = 8080;
@@ -9,8 +8,8 @@ var POLICY_FILE = "policy.json";
 var awsCofig = helpers.readJSONFile(AWS_CONFIG_FILE);
 var policyData = helpers.readJSONFile(POLICY_FILE);
 var bucket = "lab4-weeia";
-policyData.expiration = moment().add(policyData.expiration).toJSON();
-console.log("policyData " + util.inspect(policyData, false, null));
+
+
 
 var policy = new s3post.Policy(policyData);
 var s3Form = new s3post.S3Form(awsCofig, policy);
