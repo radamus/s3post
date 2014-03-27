@@ -5,13 +5,14 @@ var PORT = 8080;
 var AWS_CONFIG_FILE = "config.json";
 var POLICY_FILE = "policy.json";
 
+//load configuration
 var awsCofig = helpers.readJSONFile(AWS_CONFIG_FILE);
 var policyData = helpers.readJSONFile(POLICY_FILE);
-var bucket = "lab4-weeia";
 
-
-
+//prepare policy
 var policy = new s3post.Policy(policyData);
+
+//define form fields for S3 POST
 var s3Form = new s3post.S3Form(awsCofig, policy);
 var formHiddenFields = s3Form.generateS3FormFields();
 
