@@ -18,7 +18,7 @@ var hash = function(algorithm, text, encoding){
 
 var hmac = function(algorithm, key, text, encoding) {	
 	var hmac = crypto.createHmac(algorithm, key);
-	return hmac.update(text).digest(encoding);
+	return hmac.update(new Buffer(text)).digest(encoding);
 }
 
 var encode = function(obj, encoding) {

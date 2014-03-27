@@ -1,19 +1,12 @@
 var helpers = require("./helpers");
+var util = require("util");
 
-var Policy = function(policyData, expiration){
-	this.policy = {};	
-	this.policy.expiration = expiration;
-	if(Array.isArray(policyData)) {
-		this.policy.conditions = policyData.slice(0);
-	}
-	else {
-		throw new Error("policy data must be an array");
-	}	
+var Policy = function(policyData){
+	this.policy = policyData;		
 }
 
 Policy.prototype.getEncodedPolicyDocument = function(){
-	var utf8Encoded = helpers.encode(this.policy, 'utf-8');	
-	return helpers.encode(utf8Encoded, 'base64');
+	return helpers.encode(this.policy, 'base64');		
 }
 
 Policy.prototype.getConditions = function(){
@@ -22,6 +15,15 @@ Policy.prototype.getConditions = function(){
 
 Policy.prototype.getSignature = function(secretAccessKey){
 	return helpers.hmac("sha1", secretAccessKey, this.getEncodedPolicyDocument(), 'base64');	
+}
+
+Policy.prototype.getConditionValueByKey = function(key){
+	var condition = [];
+	this.policy.conditions.forEach(function(elem) {		
+		if(Object.keys(elem)[0] === key)
+			condition = elem[Object.keys(elem)[0]];
+	});
+	return condition;
 }
 
 var S3Form = function(awsCofig, policy){
