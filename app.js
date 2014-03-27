@@ -1,24 +1,30 @@
-
-var fs = require('fs')
+var helpers = require("./helpers");
+var s3post = require("./s3post");
 var PORT = 8080;
+var AWS_CONFIG_FILE = "config.json";
+var POLICY_FILE = "policy.json";
 
-var s3PostPolicy = [];
-var accesKey;
-var signature;
+var awsCofig = helpers.readJSONFile(AWS_CONFIG_FILE);
+var policyData = helpers.readJSONFile(POLICY_FILE);
+
+var policy = new s3post.Policy(policyData, new Date());
+
+
+var formHiddenFields = s3post.generateS3FormFields(awsCofig, policy);
+console.log(formHiddenFields);
 
 var urlMap = [
-	{path: "/", action:__dirname + "/html/index.html"},	 
+	{path: "/", action:{template: "index.ejs", params:formHiddenFields}},	 
 //	{path: "/digest", action: lab1_1},	
-
 	];
 
 var service = require("webs-weeia").http(urlMap);
 
-service(PORT);
+//service(PORT);
 
 
 
-var base64 = function(obj) {
-	var stringifyObj = JSON.stringify(obj);
-	return new Buffer(obj).toString('base64');
-}
+
+
+
+

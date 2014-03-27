@@ -1,8 +1,8 @@
 [
-	{"bucket": "s3-bucket"}, 
-    ["starts-with", "$key", "uploads/"],
+	{"bucket": "lab4-weeia"}, 
+    ["starts-with", "$key", "test/"],
     {"acl": "private"},
-    {"success_action_redirect": "http://localhost/"},
+    {"success_action_redirect": "http://localhost:8080/"},
     ["starts-with", "$Content-Type", ""],
     ["content-length-range", 0, 1048576]
 ]

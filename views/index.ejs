@@ -15,14 +15,14 @@
 	    		</div>
 		  	</div>
 	  		<div class="panel-body">
-	  <form action="/digest" method="POST" id="sign-up-form" class="form-horizontal">	
+	  <form action="/digest" method="POST" id="sign-up-form" class="form-horizontal" enctype="multipart/form-data">	
 	
 	<div class="container">
 	<% policy.forEach(function(elem){ %>
 	  <input type="hidden" name= <%= "\"" + elem.name + "\""%> value=<%"\"" + elem.value + "\""%>
 		<%}); %>
 	<input type="hidden" name="key" value="uploads/${filename}">
-      <input type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
+      <input type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"/> 
       <input type="hidden" name="acl" value="private"> 
       <input type="hidden" name="success_action_redirect" value="http://localhost/">
       <input type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
@@ -30,8 +30,8 @@
 	<div class="col-xs-5">
 	<div class="form-group">
     	<label for="exampleInputFile">File input</label>
-    <input type="file" name="file">
-    <p class="help-block">Plik zostanie wysłany do: </p>
+    	<input type="file" name="file">
+    	<p class="help-block">Plik zostanie wysłany do: </p>
   </div>
 	
   	
