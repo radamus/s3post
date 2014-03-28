@@ -1,28 +1,21 @@
-var util = require("util");
-var helpers = require("./helpers");
-var s3post = require("./s3post");
+
+var ACTIONS_FOLDER = "./actions/";
+var ACTIONS_CONFIG_FILE = "actions.json";
 var PORT = 8080;
-var AWS_CONFIG_FILE = "config.json";
-var POLICY_FILE = "policy.json";
 
-//load configuration
-var awsCofig = helpers.readJSONFile(AWS_CONFIG_FILE);
-var policyData = helpers.readJSONFile(POLICY_FILE);
+var helpers = require("./helpers");
 
-//prepare policy
-var policy = new s3post.Policy(policyData);
+var actionsCofig = helpers.readJSONFile(ACTIONS_CONFIG_FILE);
 
-//define form fields for S3 POST
-var s3Form = new s3post.S3Form(awsCofig, policy);
-var formHiddenFields = s3Form.generateS3FormFields();
+actionsCofig.forEach(function(elem){
+	elem.action = require(ACTIONS_FOLDER + elem.action).action;
+});
 
-console.log(util.inspect(formHiddenFields, false, null));
-var target = policy.getConditionValueByKey("bucket");
-var urlMap = [
-	{path: "/", action:{template: "index.ejs", params:{fields:formHiddenFields, bucket:target} } },	 
-	];
 
-var service = require("webs-weeia").http(urlMap);
+
+
+
+var service = require("webs-weeia").http(actionsCofig);
 
 service(PORT);
 

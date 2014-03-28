@@ -1,0 +1,4 @@
+[
+	{"path":"/","action":"createform"},
+	{"path":"/hello","action":"test"}
+]
