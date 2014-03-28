@@ -8,11 +8,14 @@ var helpers = require("./helpers");
 var actionsCofig = helpers.readJSONFile(ACTIONS_CONFIG_FILE);
 
 actionsCofig.forEach(function(elem){
-	elem.action = require(ACTIONS_FOLDER + elem.action).action;
+	if(elem.action && elem.path){
+		if(!elem.action.template){
+			elem.action = require(ACTIONS_FOLDER + elem.action).action;
+		}
+	}else {
+		console.log("unknown configuration: " + JSON.stringify(elem));
+	}
 });
-
-
-
 
 
 var service = require("webs-weeia").http(actionsCofig);
