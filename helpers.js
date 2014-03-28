@@ -2,19 +2,6 @@ var fs = require('fs');
 var crypto = require('crypto');
 var async = require("async");
 
-var hash = function(algorithm, text, encoding){
-	var digest;
-	var encoding = encoding ? encoding : 'hex';	
-	try {
-		var shasum = crypto.createHash(algorithm);
-		shasum.update(text);
-		digest = shasum.digest(encoding); 
-	}catch(e){
-		console.log(e);
-	}
-	return digest;
-}
-
 var execVoidFunInLoopAsync = function(loopCount, fun, params, callback){	
 	var counter = 0;
 	loopCount = loopCount >= 0 ? loopCount : 0;
@@ -33,8 +20,21 @@ var execVoidFunInLoopAsync = function(loopCount, fun, params, callback){
 	loop();
 }
 
+var calculateDigest = function(algorithm, doc, encoding){
+	var digest;
+	var encoding = encoding ? encoding : 'hex';	
+	try {
+		var shasum = crypto.createHash(algorithm);
+		shasum.update(doc);
+		digest = shasum.digest(encoding); 
+	}catch(e){
+		console.log(e);
+	}
+	return digest;
+}
 
-var digest = function(doc, algorithms, callback, loopCount){
+
+var calculateMultiDigest = function(doc, algorithms, callback, loopCount){
 	algorithms = algorithms ? algorithms : [];
 	loopCount = loopCount ? loopCount : 0;
 	callback = callback ? callback : function(){};
@@ -49,12 +49,12 @@ var digest = function(doc, algorithms, callback, loopCount){
 				console.time(method);
 				execVoidFunInLoopAsync(loopCount, 
 					function(){
-						hash(method,doc);
+						calculateDigest(method,doc);
 					},
 					[],
 					function() {
 						console.timeEnd(method);
-						callback(null, method + ": " + hash(method,doc));
+						callback(null, method + ": " + calculateDigest(method,doc));
 					});						
 			}, algorithms.length);			
 		var digests = [];		
@@ -97,8 +97,8 @@ var readJSONFile = function(fileName){
 	return object;	  	
 }
 
-exports.hash = hash; //= function(algorithm, text, encoding) e.g. hash("md5", "some text", "hex")
-exports.digest = digest; //= function(doc, algorithms, callback, loopCount)
+exports.calculateDigest = calculateDigest; //= function(algorithm, text, encoding) e.g. calculateMultiDigest("md5", "some text", "hex")
+exports.calculateMultiDigest = calculateMultiDigest; //= function(doc, algorithms, callback, loopCount)
 exports.hmac = hmac; // = function(algorithm, key, text, encoding) 
 exports.encode = encode; //encode = function(obj, encoding)
 exports.readJSONFile = readJSONFile; // = function(fileName)

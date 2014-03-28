@@ -10,7 +10,7 @@ var task =  function(request, callback){
 	var doc = request.body.txt ? request.body.txt : "";
 	
 	
-	helpers.digest(doc, 
+	helpers.calculateMultiDigest(doc, 
 		algorithms, 
 		function(err, digests) {
 			callback(null, digests.join("<br>") + ("<hr>  <br>Service provided by: " + os.hostname()));	
