@@ -8,22 +8,18 @@ var INDEX_TEMPLATE = "index.ejs";
 
 
 var task = function(request, callback){
-	//load configuration
-	var awsCofig = helpers.readJSONFile(AWS_CONFIG_FILE);
-	var policyData = helpers.readJSONFile(POLICY_FILE);
+	//1. load configuration
+	
 
-	//prepare policy
-	var policy = new Policy(policyData);
+	//2. prepare policy
+	
 
-	//define form fields for S3 POST
-	var s3Form = new S3Form(awsCofig, policy);
-	var formHiddenFields = s3Form.generateS3FormFields();	
+	//3. generate form fields for S3 POST
+	
+	//4. get bucket name
+	
 
-	console.log(util.inspect(formHiddenFields, false, null));
-
-	var target = policy.getConditionValueByKey("bucket");
-
-	callback(null, {template: INDEX_TEMPLATE, params:{fields:formHiddenFields, bucket:target}});
+	callback(null, {template: INDEX_TEMPLATE, params:{fields:[], bucket:""}});
 }
 
 exports.action = task;

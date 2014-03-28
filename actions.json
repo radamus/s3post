@@ -1,6 +1,5 @@
 [
 	{"path": "/digestForm", "action":{"template":"digestForm.ejs", "params":[]} },
-	{"path":"/","action":"createform"},
-	{"path":"/hello","action":"test"},
+	{"path":"/","action":"createform"},	
 	{"path":"/digest","action":"digest"}
 ]
