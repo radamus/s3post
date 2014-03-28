@@ -1,8 +1,8 @@
 {	"expiration" : {"day":1},
-	"conditions": [ ["starts-with", "$key", ""],
-    				 {"bucket": ""}, 
+	"conditions": [ ["starts-with", "$key", "test/"],
+    				 {"bucket": "lab4-weeia"}, 
     				 {"acl": "private"},
-    				 {"success_action_redirect": ""},   
+    				 {"success_action_redirect": "http://localhost:8080/"},   
     				 ["content-length-range", 0, 1048576]
     				]   
 }
