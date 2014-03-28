@@ -8,7 +8,7 @@ var Policy = function(policyData){
 	console.log("policyData " + util.inspect(policyData, false, null));	
 }
 
-Policy.prototype.getEncodedPolicyDocument = function(){
+Policy.prototype.generateEncodedPolicyDocument = function(){
 	return helpers.encode(this.policy, 'base64');		
 }
 
@@ -16,7 +16,7 @@ Policy.prototype.getConditions = function(){
 	return this.policy.conditions;
 }
 
-Policy.prototype.getSignature = function(secretAccessKey){
+Policy.prototype.generateSignature = function(secretAccessKey){
 	return helpers.hmac("sha1", secretAccessKey, this.getEncodedPolicyDocument(), 'base64');	
 }
 
@@ -31,13 +31,19 @@ Policy.prototype.getConditionValueByKey = function(key){
 
 var S3Form = function(awsCofig, policy){
 	this.awsCofig = awsCofig;
-	this.policy = policy;
+	if(policy instanceof Policy)
+		this.policy = policy;
+	else{
+		console.log("policy instanceof Policy");
+		throw new Error("policy instanceof Policy");
+	}
+	
 }
 
 S3Form.prototype.generateS3FormFields = function() {
 	var conditions =this.policy.getConditions();
-	var policyDocument = this.policy.getEncodedPolicyDocument();
-	var signature = this.policy.getSignature(this.awsCofig.secretAccessKey);
+	var policyDocument = this.policy.generateEncodedPolicyDocument();
+	var signature = this.policy.generateSignature(this.awsCofig.secretAccessKey);
 	var formFields = [];
 
 	conditions.forEach(function(elem){
