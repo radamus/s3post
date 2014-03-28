@@ -97,8 +97,8 @@ var readJSONFile = function(fileName){
 	return object;	  	
 }
 
-exports.hash = hash;
-exports.digest = digest;
-exports.hmac = hmac;
-exports.encode = encode;
-exports.readJSONFile = readJSONFile;
+exports.hash = hash; //= function(algorithm, text, encoding) e.g. hash("md5", "some text", "hex")
+exports.digest = digest; //= function(doc, algorithms, callback, loopCount)
+exports.hmac = hmac; // = function(algorithm, key, text, encoding) 
+exports.encode = encode; //encode = function(obj, encoding)
+exports.readJSONFile = readJSONFile; // = function(fileName)

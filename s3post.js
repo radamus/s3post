@@ -1,6 +1,6 @@
 var util = require("util");
-var helpers = require("./helpers");
 var moment = require("moment");
+var helpers = require("./helpers");
 
 var Policy = function(policyData){
 	this.policy = policyData;	
@@ -33,13 +33,13 @@ var S3Form = function(awsCofig, policy){
 	this.awsCofig = awsCofig;
 	this.policy = policy;
 }
+
 S3Form.prototype.generateS3FormFields = function() {
 	var conditions =this.policy.getConditions();
 	var policyDocument = this.policy.getEncodedPolicyDocument();
 	var signature = this.policy.getSignature(this.awsCofig.secretAccessKey);
 	var formFields = [];
 
-	
 	conditions.forEach(function(elem){
 		if(Array.isArray(elem)){
 			if(elem[1] === "$key")
@@ -63,9 +63,10 @@ S3Form.prototype.generateS3FormFields = function() {
 
 
 var hiddenField = function(fieldName, value) {
-	//return  '<input type="hidden" name="' + fieldName + '" value="' + value + '"/>';
 	return {name: fieldName, value : value};
 }
 
-exports.Policy = Policy;
-exports.S3Form = S3Form;
+exports.Policy = Policy; // usage: policy = new Policy(policyData);
+exports.S3Form = S3Form; // usage: s3Form = new S3Form(awsConfig, policy);
+
+
