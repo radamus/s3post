@@ -17,7 +17,7 @@ Policy.prototype.getConditions = function(){
 }
 
 Policy.prototype.generateSignature = function(secretAccessKey){
-	return helpers.hmac("sha1", secretAccessKey, this.getEncodedPolicyDocument(), 'base64');	
+	return helpers.hmac("sha1", secretAccessKey, this.generateEncodedPolicyDocument(), 'base64');	
 }
 
 Policy.prototype.getConditionValueByKey = function(key){
